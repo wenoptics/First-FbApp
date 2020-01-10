@@ -25,7 +25,7 @@
     See 
 
     e.g. `$` `yarn global add @quasar/cli`
-    f
+    
     `$` `export PATH="$(yarn global bin):$PATH"`
 
 4. Initilize the Project
