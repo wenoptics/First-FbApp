@@ -1,6 +1,6 @@
 # Development
 
-`$` ``
+`$` `git clone https://github.com/wenoptics/First-FbApp.git`
 
 ## Linux
 
@@ -18,10 +18,17 @@
 
 3. Install Quasar CLI
 
-    (`Quasar`: `v1.6.1`, `Quasar CLI`: ``)
+    (`Quasar`: `v1.6.1`, `Quasar CLI`: `1.0.5`)
 
     See 
 
     e.g. `$` `yarn global add @quasar/cli`
     
     `$` `export PATH="$(yarn global bin):$PATH"`
+
+4. In the application folder:
+
+    `$` `cd app`
+
+    `$` `yarn install` 
+
