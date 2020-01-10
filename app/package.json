@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "A Quasar Framework app",
   "productName": "FLApp Test",
+  "homepage": "https://github.com/wenoptics/First-FbApp",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Guangxue <grayson.wen@ansys.com> (Grayson)",
