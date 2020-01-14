@@ -14,6 +14,11 @@ module.exports = function (ctx) {
       'app.sass'
     ],
 
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-vendor
+    // vendor: {
+    //   remove: ['grpc']
+    // },
+
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
@@ -57,7 +62,7 @@ module.exports = function (ctx) {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       showProgress: true,
       gzip: false,
-      analyze: false,
+      analyze: true,
       // Options below are automatically set depending on the env, set them if you want to override
       // preloadChunks: false,
       // extractCSS: false,
@@ -73,6 +78,18 @@ module.exports = function (ctx) {
             formatter: require('eslint').CLIEngine.getFormatter('stylish')
           }
         })
+
+        cfg.externals = [
+          'grpc'
+        ]
+        // var nodeExternals = require('webpack-node-externals')
+        // cfg.target = 'node'
+        // cfg.externals = [nodeExternals()]
+
+        // cfg.node = {
+        //   __filename: true,
+        //   __dirname: true
+        // }
       }
     },
 

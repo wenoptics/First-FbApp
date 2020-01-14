@@ -10,10 +10,15 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev -m electron",
+    "build": "quasar build -m electron",
+    "rebuild": "bash ../exec/clean-cache.sh && npm install && bash ./node_modules/.bin/electron-rebuild"
   },
   "dependencies": {
+    "@grpc/proto-loader": "^0.5.3",
     "@quasar/extras": "^1.0.0",
+    "grpc": "^1.24.1",
     "quasar": "^1.0.0"
   },
   "devDependencies": {
@@ -26,6 +31,7 @@
     "electron-debug": "^3.0.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^14.1.1",
+    "electron-rebuild": "^1.8.8",
     "eslint": "^5.10.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-vue": "^5.0.0"

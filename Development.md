@@ -38,6 +38,22 @@
 
 ### 2. 🎉Run Dev!
 
+#### 1. Clean Cache
+
+Considering to clean cache if there's any build-time error:
+
+`$` `./exec/clean-cache.ps1`
+
+(Then rebuild:)
+
+`$` `npm install && ./node_modules/.bin/electron-rebuild`
+
+#### 2. Install new dependencies:
+
+Run `$` `./node_modules/.bin/electron-rebuild` after module installed.
+
+#### 3. Start dev run
+
 `$` `quasar dev -m electron`
 
 (Or on Linux, if encourtering chrome-sandbox issue, we can disable Electron sandbox by:

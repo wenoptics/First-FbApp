@@ -10,6 +10,7 @@
           class="q-px-xl q-py-xs"
           label="Input"
           outline
+          @click="startServer"
         />
         <div class="status-container">
           <q-btn flat size="1em" round color="grey" icon="warning"/>
@@ -45,8 +46,29 @@
 </template>
 
 <script>
+import path from 'path'
+// const grpc = require('grpc')
+const grpc = window.grpc
+const PROTO_PATH = path.join(__statics, '/protos/helloworld.proto')
+
+// use dynamic proto loading, consider changing to static (compiled) for performance?
+// let protoLoader = require('@grpc/proto-loader')
+const helloProto = grpc.load(PROTO_PATH).helloworld
+
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  methods: {
+    sayHello: function (call, callback) {
+      callback(null, { message: 'Hello ' + call.request.name })
+    },
+    startServer: function () {
+      const server = new grpc.Server()
+      server.addService(helloProto.Greeter.service, { sayHello: this.sayHello })
+      server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
+      server.start()
+      console.log('server started', server)
+    }
+  }
 }
 </script>
 
