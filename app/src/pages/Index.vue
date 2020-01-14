@@ -59,7 +59,7 @@ export default {
   name: 'PageIndex',
   methods: {
     sayHello: function (call, callback) {
-      callback(null, { message: 'Hello ' + call.request.name })
+      callback(null, { message: 'Hello ' + call.request.name + ', from Electron' })
     },
     startServer: function () {
       const server = new grpc.Server()
