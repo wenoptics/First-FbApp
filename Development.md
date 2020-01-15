@@ -20,7 +20,7 @@
 
 3. Install Quasar CLI
 
-    (`Quasar`: `v1.6.1`, `Quasar CLI`: `1.0.5`)
+    (`Quasar`: `v1.7.3`, `Quasar CLI`: `1.5.1`)
 
     See 
 
@@ -63,7 +63,7 @@ Run `$` `./node_modules/.bin/electron-rebuild` after module installed.
 
 `$` `quasar build -m electron`
 
-If you build an AppImage (`/app/dist/electron/Packaged/<some_name>.AppImage`), if have trouble with chrome-sandbox, you can disable sandbox with `--no-sandbox` flag. (So far, the app is being developing without the presence of the sandbox)
+If you built an AppImage (`/app/dist/electron/Packaged/<some_name>.AppImage`), if have trouble with chrome-sandbox, you can disable sandbox with `--no-sandbox` flag. (So far, the app is being developing without the presence of the sandbox)
 
  - About a this [fix](https://github.com/electron-userland/electron-builder/issues/4278)
  - More about [the SUID sandbox issue](https://github.com/electron/electron/issues/17972)
