@@ -47,8 +47,7 @@
 
 <script>
 import path from 'path'
-// const grpc = require('grpc')
-const grpc = window.grpc
+const grpc = window.grpc // const grpc = require('grpc')
 const PROTO_PATH = path.join(__statics, '/protos/helloworld.proto')
 
 // use dynamic proto loading, consider changing to static (compiled) for performance?

@@ -25,20 +25,16 @@ function createWindow () {
     height: 800,
     useContentSize: true,
     webPreferences: {
-      // keep in sync with /quasar.conf.js > electron > nodeIntegration
-      // (where its default value is "true")
+      // Change from /quasar.conf.js > electron > nodeIntegration;
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
-      nodeIntegration: true,
+      nodeIntegration: QUASAR_NODE_INTEGRATION,
       preload: require('path').resolve(__dirname, 'electron-preload.js')
     },
-    frame: false,
-    titleBarStyle: 'hidden'
+    frame: false
+    // titleBarStyle: 'hidden'
   })
 
   mainWindow.loadURL(process.env.APP_URL)
-
-  // const grpc = require('grpc')
-  // console.log(grpc)
 
   mainWindow.on('closed', () => {
     mainWindow = null

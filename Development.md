@@ -69,3 +69,20 @@ If you build an AppImage (`/app/dist/electron/Packaged/<some_name>.AppImage`), i
  - More about [the SUID sandbox issue](https://github.com/electron/electron/issues/17972)
  - [Chromium sandbox](https://chromium.googlesource.com/chromium/src/+/master/docs/design/sandbox_faq.md)
 
+### Troubleshots
+
+  #### 1. Complaining about node-gyp on build-time
+
+  - `node-gyp` (`node-gyp-bin`)
+
+  - `The imported project "D:\Microsoft.Cpp.Default.props" was not found.`
+
+  **Things to check**
+
+  This might only affect build time, so even you get `quasar dev -m electron` works, still might run into this issue (it occurs at the packaging stage)
+
+  - Check [this Quasar article](https://quasar.dev/quasar-cli/developing-electron-apps/preparation#A-note-for-Windows-Users) about build on windows
+
+  - Check [this Electron article](https://electronjs.org/docs/tutorial/using-native-node-modules#installing-modules-and-rebuilding-for-electron) about rebuilding module for Electron
+
+  - Install `visual-cpp-build-tools` (VS2015) and [more disscussions](https://github.com/nodejs/node-gyp/issues/671) on this.
