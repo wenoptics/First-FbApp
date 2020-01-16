@@ -10,7 +10,7 @@
           class="q-px-xl q-py-xs"
           label="Input"
           outline
-          @click="startServer"
+          @click="startClient"
         />
         <div class="status-container">
           <q-btn flat size="1em" round color="grey" icon="warning"/>
@@ -66,6 +66,25 @@ export default {
       server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
       server.start()
       console.log('server started', server)
+    },
+    startClient: function () {
+      var client = new helloProto.Greeter(
+        'localhost:50051',
+        grpc.credentials.createInsecure())
+      var user
+      if (process.argv.length >= 3) {
+        user = process.argv[2]
+      } else {
+        user = 'world'
+      }
+      client.sayHello(
+        { name: user },
+        function (err, response) {
+          if (err) {
+            console.log(err.stack)
+          }
+          console.log('Greeting:', response.message)
+        })
     }
   }
 }
