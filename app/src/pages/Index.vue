@@ -13,7 +13,13 @@
           @click="startClient"
         />
         <div class="status-container">
-          <q-btn flat size="1em" round color="grey" icon="warning"/>
+          <q-btn
+            flat
+            size="1em"
+            round
+            color="grey"
+            icon="warning"
+          />
         </div>
       </div>
       <div class="vl-2"></div>
@@ -28,7 +34,13 @@
           outline
         />
         <div class="status-container">
-          <q-btn flat size="1em" round color="grey" icon="warning" />
+          <q-btn
+            flat
+            size="1em"
+            round
+            color="grey"
+            icon="warning"
+          />
         </div>
       </div>
 
@@ -85,26 +97,26 @@ export default {
 </script>
 
 <style lang="scss">
-  .vl-2 {
-    border-left: 1px solid $dark;
-    height: 2em;
-  }
+.vl-2 {
+  border-left: 1px solid $dark;
+  height: 2em;
+}
 
-  .vl-dash {
-    border-left-style: dashed
-  }
+.vl-dash {
+  border-left-style: dashed;
+}
 
-  .dash-btn.q-btn--outline .q-btn__wrapper:before {
-    border-style: dashed
-  }
+.dash-btn.q-btn--outline .q-btn__wrapper:before {
+  border-style: dashed;
+}
 
-  .status-row {
-    position: relative;
-  }
+.status-row {
+  position: relative;
+}
 
-  .status-container {
-    position: absolute;
-    top: calc( 50% - 1.4em);
-    left: -3.5em
-  }
+.status-container {
+  position: absolute;
+  top: calc(50% - 1.4em);
+  left: -3.5em;
+}
 </style>
