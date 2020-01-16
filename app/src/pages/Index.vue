@@ -71,14 +71,8 @@ export default {
       var client = new helloProto.Greeter(
         'localhost:50051',
         grpc.credentials.createInsecure())
-      var user
-      if (process.argv.length >= 3) {
-        user = process.argv[2]
-      } else {
-        user = 'world'
-      }
       client.sayHello(
-        { name: user },
+        { name: 'FBapp-node' },
         function (err, response) {
           if (err) {
             console.log(err.stack)
