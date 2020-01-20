@@ -1,8 +1,9 @@
 import { app, BrowserWindow, nativeTheme } from 'electron'
+import path from 'path'
 
 try {
   if (process.platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
-    require('fs').unlinkSync(require('path').join(app.getPath('userData'), 'DevTools Extensions'))
+    require('fs').unlinkSync(path.join(app.getPath('userData'), 'DevTools Extensions'))
   }
 } catch (_) { }
 
@@ -11,7 +12,27 @@ try {
  * The reason we are setting it here is that the path needs to be evaluated at runtime
  */
 if (process.env.PROD) {
-  global.__statics = require('path').join(__dirname, 'statics').replace(/\\/g, '\\\\')
+  global.__statics = path.join(__dirname, 'statics').replace(/\\/g, '\\\\')
+}
+
+function createBackendProc () {
+  // TODO pass the name/path from .conf (https://quasar.dev/quasar-cli/cli-documentation/handling-process-env#Adding-to-process.env)
+  let binPath = path.join(__statics, 'backend-bin', 'FBapp_backend', 'FBapp_backend' + '.exe')
+  console.log('bin path is ', binPath)
+  let port = 50051
+  let pyProc
+  let isProduction = true // process.env.PROD
+
+  if (isProduction) {
+    pyProc = require('child_process').execFile(binPath, [port])
+  } else {
+    pyProc = require('child_process').spawn('python', [binPath, port])
+  }
+
+  if (pyProc != null) {
+    console.log(pyProc)
+    console.log('Bin process success on port ' + port)
+  }
 }
 
 let mainWindow
@@ -28,7 +49,7 @@ function createWindow () {
       // Change from /quasar.conf.js > electron > nodeIntegration;
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: QUASAR_NODE_INTEGRATION,
-      preload: require('path').resolve(__dirname, 'electron-preload.js')
+      preload: path.resolve(__dirname, 'electron-preload.js')
     },
     frame: false
     // titleBarStyle: 'hidden'
@@ -41,7 +62,10 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  createBackendProc()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
