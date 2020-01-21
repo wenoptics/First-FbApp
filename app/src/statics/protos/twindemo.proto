@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package twindemo;
+
+service Twin {
+    rpc SimulateBatchCSV(SimulationInput) returns (SimulationResponse) {}
+    rpc CheckFileTwin(CheckFileInput) returns (CheckFileResult) {}
+    rpc CheckFileInputCSV(CheckFileInput) returns (CheckFileResult) {}
+}
+
+message SimulationInput {
+    string model_file_path = 1;
+    string input_file_path = 2;
+}
+message SimulationResponse {
+    bool is_success = 1;
+    string log = 2;
+    string message = 3;
+}
+
+message CheckFileInput {
+    string file_path = 1;
+}
+message CheckFileResult {
+    bool is_success = 1;
+    string message = 2;
+}
+

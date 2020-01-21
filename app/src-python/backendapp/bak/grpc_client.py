@@ -18,7 +18,7 @@ import logging
 
 import grpc
 
-from backendapp import helloworld_pb2, helloworld_pb2_grpc
+from backendapp.bak import helloworld_pb2_grpc, helloworld_pb2
 
 
 def run():

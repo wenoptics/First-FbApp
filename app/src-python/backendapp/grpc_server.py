@@ -1,38 +1,41 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""The Python implementation of the GRPC helloworld.Greeter server."""
-
 from concurrent import futures
 import logging
 
 import grpc
 
-from backendapp import helloworld_pb2, helloworld_pb2_grpc
+from backendapp.business.simulation import simulation_batch_csv, get_log_path, check_file_exists
+from backendapp.protodef import twindemo_pb2_grpc, twindemo_pb2
 
 
-class Greeter(helloworld_pb2_grpc.GreeterServicer):
+class TwinServicer(twindemo_pb2_grpc.TwinServicer):
+    def CheckFileTwin(self, request, context):
+        return twindemo_pb2.CheckFileResult(is_success=check_file_exists(request.file_path))
 
-    def SayHello(self, request, context):
-        return helloworld_pb2.HelloReply(message='Hello %s, from Python!' % request.name)
+    def CheckFileInputCSV(self, request, context):
+        return twindemo_pb2.CheckFileResult(is_success=check_file_exists(request.file_path))
+
+    def SimulateBatchCSV(self, request: twindemo_pb2.SimulationInput, context):
+        log_file = None
+        is_success = True
+        msg = None
+        
+        try:
+            log_file = get_log_path(request.model_file_path)
+            simulation_batch_csv(request.model_file_path, request.input_file_path)
+        except Exception as e:
+            is_success = False
+            msg = str(e)
+        finally:
+            log = open(log_file).read() if log_file else None
+            return twindemo_pb2.SimulationResponse(is_success=is_success, log=log, message=msg)
 
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+    twindemo_pb2_grpc.add_TwinServicer_to_server(TwinServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
-    print('server started')
+    print('grpc server started')
     server.wait_for_termination()
 
 

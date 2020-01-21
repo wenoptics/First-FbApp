@@ -17,21 +17,24 @@ if (process.env.PROD) {
 
 function createBackendProc () {
   // TODO pass the name/path from .conf (https://quasar.dev/quasar-cli/cli-documentation/handling-process-env#Adding-to-process.env)
-  let binPath = path.join(__statics, 'backend-bin', 'FBapp_backend', 'FBapp_backend' + '.exe')
-  console.log('bin path is ', binPath)
   let port = 50051
   let pyProc
-  let isProduction = true // process.env.PROD
+  let isProduction = process.env.PROD
 
   if (isProduction) {
+    let binPath = path.join(__statics, 'backend-bin', 'FBapp_backend', 'FBapp_backend' + '.exe')
+    console.log('bin path is ', binPath)
     pyProc = require('child_process').execFile(binPath, [port])
   } else {
-    pyProc = require('child_process').spawn('python', [binPath, port])
+    console.log('===================\nDevelopment run\n===================')
+    let pyPath = 'D:\\dev\\electron-fbapp-test\\app\\src-python\\main_dev.py'
+    // pyProc = require('child_process').spawn('python', [pyPath, port])
   }
 
   if (pyProc != null) {
-    console.log(pyProc)
-    console.log('Bin process success on port ' + port)
+    console.log('Python process success on port ' + port)
+  } else {
+    console.log('Python process not created.')
   }
 }
 
@@ -42,8 +45,8 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 348,
+    height: 547,
     useContentSize: true,
     webPreferences: {
       // Change from /quasar.conf.js > electron > nodeIntegration;
