@@ -101,7 +101,7 @@
     <q-footer bordered id="ref-status-bar-container">
       <q-toolbar id="ref-footer-toolbar">
         <q-toolbar-title id="ref-status-bar">
-          OK
+          Ready
         </q-toolbar-title>
       </q-toolbar>
     </q-footer>

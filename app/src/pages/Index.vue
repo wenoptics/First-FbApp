@@ -15,10 +15,23 @@
         <div class="status-container">
           <q-btn v-if="inputFileOk === 'intermediate'"
             flat size="1em" round color="grey" icon="warning"/>
+          <q-circular-progress v-else-if="inputFileOk === 'loading'"
+            indeterminate size="2em" :thickness="0.2" color="lime" track-color="grey-3"/>
           <q-btn v-else-if="inputFileOk"
             flat size="1em" round color="green" icon="check"/>
           <q-btn v-else
             flat size="1em" round color="orange" icon="warning"/>
+          <q-popup-proxy breakpoint=0>
+            <q-banner v-if="inputFileOk === true">
+              Input File: <a href="#">{{getFileNameFromPath(inputFilePath)}}</a>
+            </q-banner>
+            <q-banner v-else>
+              <template v-slot:avatar>
+                <q-icon name="description" color="primary" />
+              </template>
+              Select a model input file or drag-and-drop.
+            </q-banner>
+          </q-popup-proxy>
         </div>
       </div>
       <div class="vl-2"></div>
@@ -36,10 +49,23 @@
         <div class="status-container">
           <q-btn v-if="modelFileOk === 'intermediate'"
             flat size="1em" round color="grey" icon="warning"/>
+          <q-circular-progress v-else-if="modelFileOk === 'loading'"
+            indeterminate size="2em" :thickness="0.2" color="lime" track-color="grey-3"/>
           <q-btn v-else-if="modelFileOk"
             flat size="1em" round color="green" icon="check"/>
           <q-btn v-else
             flat size="1em" round color="orange" icon="warning"/>
+          <q-popup-proxy breakpoint=0>
+            <q-banner v-if="modelFileOk === true">
+              Model File: <a href="#">{{getFileNameFromPath(modelFilePath)}}</a>
+            </q-banner>
+            <q-banner v-else>
+              <template v-slot:avatar>
+                <q-icon name="description" color="primary" />
+              </template>
+              Select a Twin model file or drag-and-drop.
+            </q-banner>
+          </q-popup-proxy>
         </div>
       </div>
 
@@ -53,6 +79,9 @@
         outline
         @click="trySimulation"
       />
+      <div v-if="outputFilePath">
+        Result CSV: <a href="#">{{getFileNameFromPath(outputFilePath)}}</a>
+      </div>
     </div>
   </q-page>
 </template>
@@ -80,12 +109,21 @@ export default {
     return {
       inputFilePath: '',
       modelFilePath: '',
+      outputFilePath: '',
       inputFileOk: 'intermediate',
       modelFileOk: 'intermediate',
-      isLoading: false
+      isLoading: false,
+      backendMessage: 'Ready'
     }
   },
+  computed: {
+    // a computed getter
+
+  },
   methods: {
+    getFileNameFromPath: function (s) {
+      return s.split('\\').join('/').split('/').splice(-1)[0]
+    },
     showWarning: function (msg) {
       this.$q.notify({
         color: 'warning',
@@ -93,6 +131,9 @@ export default {
         icon: 'warning',
         actions: [{ icon: 'close', color: 'white' }]
       })
+    },
+    resetSimulationStatus: function () {
+      this.outputFilePath = ''
     },
     SimulateBatchCSV: function (modelFile, inputFile) {
       const self = this
@@ -112,6 +153,7 @@ export default {
           }
           return
         }
+        self.outputFilePath = response.simulation_output_file
         console.log('SimulateBatchCSV',
           'Simulation ok:', response.is_success,
           response.message
@@ -127,6 +169,7 @@ export default {
       this.SimulateBatchCSV(this.modelFilePath, this.inputFilePath)
     },
     openTwinFile: function () {
+      const self = this
       let ret = dialog.showOpenDialogSync({
         properties: ['openFile'],
         filters: [
@@ -136,8 +179,12 @@ export default {
       })
       if (ret !== undefined) {
         this.modelFilePath = ret[0]
+        this.resetSimulationStatus()
+        this.modelFileOk = 'loading'
         twinClient.CheckFileTwin({ file_path: this.modelFilePath }, (err, response) => {
-          if (err) {}
+          if (err || !response.is_success) {
+            self.showWarning('Load Model Failed')
+          }
           this.modelFileOk = response.is_success
         })
       }
@@ -152,8 +199,11 @@ export default {
       })
       if (ret !== undefined) {
         this.inputFilePath = ret[0]
+        this.resetSimulationStatus()
+        this.inputFileOk = 'loading'
         twinClient.CheckFileInputCSV({ file_path: this.inputFilePath }, (err, response) => {
           if (err || !response.is_success) {
+            self.showWarning('Load Input Failed')
           }
           this.inputFileOk = response.is_success
         })

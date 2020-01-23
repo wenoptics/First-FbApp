@@ -70,6 +70,12 @@ module.exports = function (ctx) {
       // preloadChunks: false,
       // extractCSS: false,
 
+      beforeBuild () {
+        // At this point, the distributables folder hasn’t been created yet. Can use async/await or
+        //    directly return a Promise.
+
+      },
+
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
         cfg.module.rules.push({
@@ -174,6 +180,7 @@ module.exports = function (ctx) {
 
         appId: 'fbapp_test',
         win: {
+          asar: false,
           target: [
             {
               target: 'portable',

@@ -3,7 +3,7 @@ import logging
 
 import grpc
 
-from backendapp.business.simulation import simulation_batch_csv, get_log_path, check_file_exists
+from backendapp.business.simulation import simulation_batch_csv, get_log_path, check_file_exists, get_output_csv_path
 from backendapp.protodef import twindemo_pb2_grpc, twindemo_pb2
 
 
@@ -18,16 +18,24 @@ class TwinServicer(twindemo_pb2_grpc.TwinServicer):
         log_file = None
         is_success = True
         msg = None
+        output_file = None
         
         try:
             log_file = get_log_path(request.model_file_path)
-            simulation_batch_csv(request.model_file_path, request.input_file_path)
+            output_file = get_output_csv_path(request.model_file_path)
+            simulation_batch_csv(request.model_file_path, request.input_file_path, 
+                                 output_file=output_file, runtime_log=log_file)
         except Exception as e:
             is_success = False
             msg = str(e)
         finally:
             log = open(log_file).read() if log_file else None
-            return twindemo_pb2.SimulationResponse(is_success=is_success, log=log, message=msg)
+            return twindemo_pb2.SimulationResponse(
+                is_success=is_success,
+                log=log,
+                message=msg,
+                simulation_output_file=output_file
+            )
 
 
 def serve():

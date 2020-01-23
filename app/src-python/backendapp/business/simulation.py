@@ -1,3 +1,4 @@
+import csv
 import os
 import sys
 import time
@@ -11,14 +12,38 @@ def check_file_exists(file_path):
     return os.path.isfile(file_path)
 
 
+def get_input_csv_info(file_path):
+    with open('file_path', newline='') as csvfile:
+        lines = csvfile.readlines()
+        if len(lines) == 0:
+            return 0, 0
+        head = lines[0].split(',')
+        return len(head), len(lines)
+
+
+def get_twin_model_info(twin_model_file):
+    runtime_log = get_log_path(twin_model_file)
+    twin_runtime = TwinRuntime(twin_model_file, runtime_log, log_level=LogLevel.TWIN_LOG_ALL)
+    return twin_runtime.twin_get_api_version(), \
+           twin_runtime.model_name.decode(), \
+           twin_runtime.number_outputs, \
+           twin_runtime.number_inputs, \
+           twin_runtime.number_parameters
+
+
 def get_log_path(twin_model_file):
     if not os.path.isfile(twin_model_file):
         raise RuntimeError('File does not exist: {}'.format(twin_model_file))
     return twin_model_file.replace('.twin', '.log')
 
 
-def simulation_batch_csv(twin_model_file, input_file, runtime_log=None):
+def get_output_csv_path(twin_model_file):
+    if not os.path.isfile(twin_model_file):
+        raise RuntimeError('File does not exist: {}'.format(twin_model_file))
+    return twin_model_file.replace('.twin', '_result.csv')
 
+
+def simulation_batch_csv(twin_model_file, input_file, output_file=None, runtime_log=None):
     # CUR_DIR = os.pathath.abspath(os.path.dirname(os.path.realpath(__file__)))
     # 
     # if not os.path.isabs(twin_model_file):
@@ -26,7 +51,7 @@ def simulation_batch_csv(twin_model_file, input_file, runtime_log=None):
 
     if not os.path.isfile(twin_model_file):
         raise RuntimeError('File does not exist: {}'.format(twin_model_file))
-    
+
     if not os.path.isfile(input_file):
         raise RuntimeError('File does not exist: {}'.format(twin_model_file))
 
@@ -35,6 +60,9 @@ def simulation_batch_csv(twin_model_file, input_file, runtime_log=None):
 
     if not runtime_log:
         runtime_log = get_log_path(twin_model_file)
+        
+    if not output_file:
+        output_file = get_output_csv_path(twin_model_file)
 
     # Load input and reference data
     twin_runtime = TwinRuntime(twin_model_file, runtime_log, log_level=LogLevel.TWIN_LOG_ALL)
@@ -48,9 +76,9 @@ def simulation_batch_csv(twin_model_file, input_file, runtime_log=None):
     print('Model initialized!')
 
     start = time.time()
-    twin_runtime.twin_simulate_batch_mode_csv(input_file, 'runtime_output.csv')
+    twin_runtime.twin_simulate_batch_mode_csv(input_file, output_file)
     end = time.time()
-    
+
     print('Simulation Finished! Time: {}s'.format(end - start))
     twin_runtime.twin_close()
     print('Model closed!')

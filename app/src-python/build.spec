@@ -27,12 +27,16 @@ else:
     cipher_obj = None
 
 a = Analysis(['main_standalone_entrance.py'],
-             # pathex=['TwinRuntimeGUI/external', './'],
-             # binaries=[
-             #     ('TwinRuntimeGUI/external/twin_runtime/*.dll', '.'),
-             #     ('TwinRuntimeGUI/external/twin_runtime/*.so', '.'),
-             #     ('TwinRuntimeGUI/external/twin_runtime/lib/', './lib'),
-             # ],
+             pathex=[
+                'backendapp/external', 
+                'backendapp/protodef', 
+                './'
+             ],
+             binaries=[
+                 ('backendapp/external/twin_runtime/*.dll', '.'),
+                 ('backendapp/external/twin_runtime/*.so', '.'),
+                 ('backendapp/external/twin_runtime/lib/', './lib'),
+             ],
              datas=[
              #    ('TwinRuntimeGUI/Frontend/View', 'TwinRuntimeGUI/Frontend/View'),
              ],

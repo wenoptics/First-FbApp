@@ -4,7 +4,7 @@ python -m grpc_tools.protoc \
   --grpc_python_out=./app/src-python/backendapp/protodef \
    app/src/statics/protos/twindemo.proto
 
-"Press ANY key to exit..."
+"Protobuf generation OK. Press ANY key to exit..."
 
 read
 pause

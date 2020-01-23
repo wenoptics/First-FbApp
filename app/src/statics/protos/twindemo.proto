@@ -16,6 +16,7 @@ message SimulationResponse {
     bool is_success = 1;
     string log = 2;
     string message = 3;
+    string simulation_output_file = 4;
 }
 
 message CheckFileInput {
